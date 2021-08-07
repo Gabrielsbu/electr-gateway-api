@@ -1,0 +1,44 @@
+server:
+    port: 8080
+
+management:
+    endpoint:
+        health:
+            show-details: always
+        gateway:
+            enabled: true
+    endpoints.web:
+        exposure.include: "*"
+
+eureka:
+    client:
+        fetch-registry: true
+        register-with-eureka: false
+        service-url.defaultZone: http://localhost:3300/eureka
+    instance:
+        prefer-ip-address: true
+
+spring:
+    application:
+        name: "gateway-service"
+    cloud:
+        gateway:
+            discovery:
+                locator:
+                    enabled: true
+                    lower-case-service-id: true
+            metrics:
+                enabled: true
+            default-filters:
+                - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_UNIQUE
+            globalcors:
+                cors-configurations:
+                    '[/**]':
+                        allowedOrigins: "http://localhost:4200"
+                        allowedHeaders: "*"
+                        allowCredentials: true
+                        allowedMethods:
+                            - GET
+                            - POST
+                            - DELETE
+                            - PUT
